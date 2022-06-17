@@ -1,3 +1,5 @@
+use std::error::Error;
+
 use rltk::{Console, GameState, Rltk, RGB};
 use specs::prelude::*;
 #[macro_use]
@@ -42,11 +44,12 @@ impl GameState for State {
     }
 }
 
-fn main() {
+fn main() -> rltk::BResult<()>{
     use rltk::RltkBuilder;
     let context = RltkBuilder::simple80x50()
         .with_title("Roguelike Tutorial")
-        .build();
+        .build()
+        .expect("when this doesnt work, the only sensible thing is to fail!");
     let mut gs = State {
         ecs: World::new()
     };
@@ -58,16 +61,18 @@ fn main() {
     gs.ecs.insert(map);
     let (player_x, player_y) = rooms[0].center();
 
+    let player = '@' as u8;
+
     gs.ecs
         .create_entity()
         .with(Position { x: player_x, y: player_y })
         .with(Renderable {
-            glyph: rltk::to_cp437('@'),
+            glyph: player,
             fg: RGB::named(rltk::YELLOW),
             bg: RGB::named(rltk::BLACK),
         })
         .with(Player{})
         .build();
 
-    rltk::main_loop(context, gs);
+    rltk::main_loop(context, gs)
 }
