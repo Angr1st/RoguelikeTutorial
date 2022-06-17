@@ -1,6 +1,4 @@
-use std::error::Error;
-
-use rltk::{Console, GameState, Rltk, RGB};
+use rltk::{GameState, Rltk, RGB};
 use specs::prelude::*;
 #[macro_use]
 extern crate specs_derive;
